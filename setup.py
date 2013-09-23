@@ -28,6 +28,6 @@ setup(
     ],
     test_suite='glfw.tests',
     install_requires=[
-        'cffi==0.7',
+        'cffi >=0.7.2, < 0.8',
     ],
 )
