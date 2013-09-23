@@ -5,7 +5,7 @@ function do_test
     reset
     pep8 glfw
     pyflakes glfw
-    nostests glfw
+    nosetests glfw
 }
 
 do_test
