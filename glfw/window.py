@@ -1,7 +1,7 @@
 from glfw._glfw import ffi, libglfw
 
 
-__all__ = ['Window', 'get_current_window']
+__all__ = ['Window']
 
 class Window(object):
     #GLFWwindow* glfwCreateWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share);
@@ -125,11 +125,5 @@ class Window(object):
     #GLFWcursorposfun glfwSetCursorPosCallback(GLFWwindow* window, GLFWcursorposfun cbfun);
     #GLFWcursorenterfun glfwSetCursorEnterCallback(GLFWwindow* window, GLFWcursorenterfun cbfun);
     #GLFWscrollfun glfwSetScrollCallback(GLFWwindow* window, GLFWscrollfun cbfun);
-
-#GLFWwindow* glfwGetCurrentContext(void);
-# TODO sort of internal
-# TODO singletons
-def get_current_window():
-    return libglfw.glfwGetCurrentContext()
 
 
