@@ -1,8 +1,8 @@
 from cffi import FFI
-ffi = FFI()
 
+__all__ = ['ffi', 'libglfw']
 
-"""
+source = """
 typedef long int ptrdiff_t;
 typedef long unsigned int size_t;
 typedef int wchar_t;
@@ -117,8 +117,7 @@ int glfwExtensionSupported(const char* extension);
 GLFWglproc glfwGetProcAddress(const char* procname);
 """
 
-
-source = open('glfw.i', 'r').read()
+ffi = FFI()
 ffi.cdef(source)
 
-C = ffi.dlopen('/usr/lib/libglfw.so')
+libglfw = ffi.dlopen('/usr/lib/libglfw.so')

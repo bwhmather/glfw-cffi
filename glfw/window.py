@@ -1,96 +1,25 @@
-def init():
-    if not C.glfwInit():
-        raise Exception()
-    
-#void glfwTerminate(void);
-def terminate():
-    C.glfwTerminate()
-
-#void glfwGetVersion(int* major, int* minor, int* rev);
-# const char* glfwGetVersionString(void);
-def get_version(verbose=False):
-    if not verbose:
-        major = ffi.new('int *')
-        minor = ffi.new('int *')
-        rev = ffi.new('int *')
-
-        C.glfwGetVersion(major, minor, rev)
-
-        return '{}.{}.{}'.format(major, minor, rev)
-    else:
-        str(C.glfwGetVersionString()
-
-#GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun cbfun);
-# TODO
+from glfw._glfw import ffi, libglfw
 
 
-
-class Monitor(object):
-    def __init__(cmonitor):
-        self._monitor = cmonitor
-
-    #void glfwGetMonitorPos(GLFWmonitor* monitor, int* xpos, int* ypos);
-    @property
-    def position(self):
-        x = ffi.new('int *')
-        y = ffi.new('int *')
-    
-        C.glfwGetMonitorPos(self._monitor, x, y)
-    
-        return int(x), int(y)
-    
-    
-    #void glfwGetMonitorPhysicalSize(GLFWmonitor* monitor, int* width, int* height);
-    @property
-    def size(self):
-        width = ffi.new('int *')
-        height = ffi.new('int *')
-    
-        C.glfwGetMonitorPos(self._monitor, width, height)
-    
-        return int(width), int(height)
-    
-
-    #const char* glfwGetMonitorName(GLFWmonitor* monitor);
-    @property
-    def name(self):
-        return str(C.glfwGetMonitorName(self._monitor))
-
-    #GLFWmonitorfun glfwSetMonitorCallback(GLFWmonitorfun cbfun);
-    # TODO
-
-    #const GLFWvidmode* glfwGetVideoModes(GLFWmonitor* monitor, int* count);
-    #const GLFWvidmode* glfwGetVideoMode(GLFWmonitor* monitor);
-    #void glfwSetGamma(GLFWmonitor* monitor, float gamma);
-    #const GLFWgammaramp* glfwGetGammaRamp(GLFWmonitor* monitor);
-    #void glfwSetGammaRamp(GLFWmonitor* monitor, const GLFWgammaramp* ramp);
-
-
-#GLFWmonitor** glfwGetMonitors(int* count);
-def get_monitors():
-    raise NotImplementedError()
-
-
-#GLFWmonitor* glfwGetPrimaryMonitor(void);
-def get_primary_monitor():
-    return C.glfwGetPrimaryMonitor()
+__all__ = ['Window', 'get_current_window']
 
 class Window(object):
-#GLFWwindow* glfwCreateWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share);
+    #GLFWwindow* glfwCreateWindow(int width, int height, const char* title, GLFWmonitor* monitor, GLFWwindow* share);
     def __init__(self, width, height, title, monitor=None):
         self._title = str(title)
         if not isinstance(title, ffi.CData):
             title = ffi.new('const char *', title)
 
-        self._window = glfwCreateWindow(width, height, title, monitor._monitor);
+        self._window = libglfw.glfwCreateWindow(width, height, title,
+                                                monitor._monitor);
 
     #void glfwMakeContextCurrent(GLFWwindow* window);
     def activate(self):
-        C.glfwMakeContextCurrent(self._window)
+        libglfw.glfwMakeContextCurrent(self._window)
 
     #void glfwSwapBuffers(GLFWwindow* window);
     def swap_buffers(self):
-        C.glfwSwapBuffers(self._window);
+        libglfw.glfwSwapBuffers(self._window);
 
 
     #void glfwDefaultWindowHints(void);
@@ -103,7 +32,6 @@ class Window(object):
     #int glfwWindowShouldClose(GLFWwindow* window);
     #void glfwSetWindowShouldClose(GLFWwindow* window, int value);
 
-
     #void glfwSetWindowTitle(GLFWwindow* window, const char* title);
     def get_title(self):
         return self._title
@@ -112,39 +40,37 @@ class Window(object):
         self._title = str(title)
         if not isinstance(title, ffi.CData):
             title = ffi.new('const char *', title)
-        C.glfwSetWindowTitle(self._window, title)
+        libglfw.glfwSetWindowTitle(self._window, title)
 
     title = property(fget=get_title, fset=set_title)
-
 
     #void glfwGetWindowPos(GLFWwindow* window, int* xpos, int* ypos);
     def get_position(self):
         x = ffi.new('int *')
         y = ffi.new('int *')
-    
-        C.glfwGetWindowPos(self._window, x, y)
-    
+
+        libglfw.glfwGetWindowPos(self._window, x, y)
+
         return int(x), int(y)
 
     #void glfwSetWindowPos(GLFWwindow* window, int xpos, int ypos);
     def set_position(self, x, y):
-        C.glfwSetWindowSize(self._window, x, y)
+        libglfw.glfwSetWindowSize(self._window, x, y)
 
     position = property(fget=get_position, fset=set_position)
-
 
     #void glfwGetWindowSize(GLFWwindow* window, int* width, int* height);
     def get_size(self):
         width = ffi.new('int *')
         height = ffi.new('int *')
-    
-        C.glfwGetWindowSize(self._window, width, height)
-    
-        return int(window), int(height)
+
+        libglfw.glfwGetWindowSize(self._window, width, height)
+
+        return int(width), int(height)
 
     #void glfwSetWindowSize(GLFWwindow* window, int width, int height);
     def set_size(self, width, height):
-        C.glfwSetWindowSize(self._window, width, height)
+        libglfw.glfwSetWindowSize(self._window, width, height)
 
     size = property(fget=get_size, fset=set_size)
 
@@ -153,27 +79,26 @@ class Window(object):
     def framebuffer_size(self):
         width = ffi.new('int *')
         height = ffi.new('int *')
-    
-        C.glfwGetWindowSize(self._window, width, height)
-    
-        return int(window), int(height)
 
+        libglfw.glfwGetWindowSize(self._window, width, height)
+
+        return int(width), int(height)
 
     #void glfwIconifyWindow(GLFWwindow* window);
     def iconify(self):
-        C.glfwIconifyWindow(self._window)
+        libglfw.glfwIconifyWindow(self._window)
 
     #void glfwRestoreWindow(GLFWwindow* window);
     def restore(self):
-        C.glfwRestoreWindow(self._window)
+        libglfw.glfwRestoreWindow(self._window)
 
     #void glfwHideWindow(GLFWwindow* window);
     def hide(self):
-        C.glfwHideWindow(self._window)
+        libglfw.glfwHideWindow(self._window)
 
     #void glfwShowWindow(GLFWwindow* window);
     def show(self):
-        C.glfwShowWindow(self._window)
+        libglfw.glfwShowWindow(self._window)
 
 
     # TODO
@@ -203,28 +128,8 @@ class Window(object):
 
 #GLFWwindow* glfwGetCurrentContext(void);
 # TODO sort of internal
+# TODO singletons
 def get_current_window():
-    return C.glfwGetCurrentContext()
+    return libglfw.glfwGetCurrentContext()
 
-#void glfwPollEvents(void);
-def poll_events():
-    C.glfwPollEvents()
 
-#void glfwWaitEvents(void);
-def wait_events():
-    C.glfwWaitEvents()
-
-class Joystick(object):
-    pass
-    #int glfwJoystickPresent(int joy);
-    #const float* glfwGetJoystickAxes(int joy, int* count);
-    #const unsigned char* glfwGetJoystickButtons(int joy, int* count);
-    #const char* glfwGetJoystickName(int joy);
-
-#void glfwSetClipboardString(GLFWwindow* window, const char* string);
-#const char* glfwGetClipboardString(GLFWwindow* window);
-#double glfwGetTime(void);
-#void glfwSetTime(double time);
-#void glfwSwapInterval(int interval);
-#int glfwExtensionSupported(const char* extension);
-#GLFWglproc glfwGetProcAddress(const char* procname);

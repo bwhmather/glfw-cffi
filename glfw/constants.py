@@ -1,12 +1,12 @@
 from enum import Enum
 
 VERSION_MAJOR = 3
-    VERSION_MINOR = 0
-    VERSION_REVISION = 2
-    RELEASE = 0
+VERSION_MINOR = 0
+VERSION_REVISION = 2
+RELEASE = 0
 
-    PRESS = 1
-    REPEAT = 2
+PRESS = 1
+REPEAT = 2
 
 
 class Key(Enum):
@@ -131,7 +131,7 @@ class Key(Enum):
     RIGHT_ALT = 346
     RIGHT_SUPER = 347
     MENU = 348
-    LAST = GLFW_KEY_MENU
+    LAST = MENU
 
 
 class Mod(Enum):
@@ -150,10 +150,10 @@ class MouseButton(Enum):
     BUTTON_6 = 5
     BUTTON_7 = 6
     BUTTON_8 = 7
-    BUTTON_LAST = GLFW_MOUSE_BUTTON_8
-    BUTTON_LEFT = GLFW_MOUSE_BUTTON_1
-    BUTTON_RIGHT = GLFW_MOUSE_BUTTON_2
-    BUTTON_MIDDLE = GLFW_MOUSE_BUTTON_3
+    BUTTON_LAST = BUTTON_8
+    BUTTON_LEFT = BUTTON_1
+    BUTTON_RIGHT = BUTTON_2
+    BUTTON_MIDDLE = BUTTON_3
 
 
 class Joystick(Enum):
@@ -173,7 +173,7 @@ class Joystick(Enum):
     JOYSTICK_14 = 13
     JOYSTICK_15 = 14
     JOYSTICK_16 = 15
-    JOYSTICK_LAST = GLFW_JOYSTICK_16
+    JOYSTICK_LAST = JOYSTICK_16
 
 
 class Error(Enum):
