@@ -1,5 +1,5 @@
 from glfw._glfw import ffi, libglfw
-
+from glfw.monitor import Monitor
 
 __all__ = ['Window']
 
@@ -8,13 +8,19 @@ class Window(object):
     def __init__(self, width, height, title, monitor=None):
         self._title = str(title)
         if not isinstance(title, ffi.CData):
-            title = ffi.new('const char *', title)
+            title = ffi.new('const char[]', title.encode('utf-8'))
 
-        self._window = libglfw.glfwCreateWindow(width, height, title,
-                                                monitor._monitor);
+        if isinstance(monitor, Monitor):
+            monitor = monitor._monitor
+
+        if monitor is None:
+            monitor = ffi.NULL
+
+
+        self._window = libglfw.glfwCreateWindow(width, height, title, monitor, ffi.NULL);
 
     #void glfwMakeContextCurrent(GLFWwindow* window);
-    def activate(self):
+    def make_current(self):
         libglfw.glfwMakeContextCurrent(self._window)
 
     #void glfwSwapBuffers(GLFWwindow* window);
@@ -30,7 +36,12 @@ class Window(object):
     # TODO
     #void glfwDestroyWindow(GLFWwindow* window);
     #int glfwWindowShouldClose(GLFWwindow* window);
+    def should_close(self):
+        return bool(libglfw.glfwWindowShouldClose(self._window))
+
     #void glfwSetWindowShouldClose(GLFWwindow* window, int value);
+    def close(self):
+        raise NotImplementedError()
 
     #void glfwSetWindowTitle(GLFWwindow* window, const char* title);
     def get_title(self):
