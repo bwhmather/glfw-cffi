@@ -1,4 +1,5 @@
 from glfw._glfw import ffi, libglfw
+from glfw.window import Window
 
 
 def init():
