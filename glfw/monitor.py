@@ -1,8 +1,10 @@
 from glfw._glfw import ffi, libglfw
 
 
-__all__ = ['Monitor', 'get_monitors', 'get_primary_monitor']
+__all__ = ['get_monitors', 'get_primary_monitor']
 
+
+_monitors = {}
 
 class Monitor(object):
     def __init__(self, monitor):
@@ -50,5 +52,9 @@ def get_monitors():
 
 #GLFWmonitor* glfwGetPrimaryMonitor(void);
 def get_primary_monitor():
-    # TODO singletons
-    return Monitor(libglfw.glfwGetPrimaryMonitor())
+    monitor = libglfw.glfwGetPrimaryMonitor()
+
+    if monitor not in _monitors:
+        _monitors[monitor] = Monitor(monitor)
+
+    return _monitors[monitor]
