@@ -3,10 +3,12 @@ from enum import Enum
 VERSION_MAJOR = 3
 VERSION_MINOR = 0
 VERSION_REVISION = 2
-RELEASE = 0
 
-PRESS = 1
-REPEAT = 2
+
+class KeyAction(Enum):
+    RELEASE = 0
+    PRESS = 1
+    REPEAT = 2
 
 
 class Key(Enum):
@@ -57,8 +59,8 @@ class Key(Enum):
     Z = 90
     LEFT_BRACKET = 91  # [
     BACKSLASH = 92  # \
-    RIGHT_BRACKET = 93  # ]
-    GRAVE_ACCENT = 96  # `
+    RIGHT_BRACKET = 93 # ]
+    GRAVE_ACCENT = 96 # `
     WORLD_1 = 161 # non-US #1
     WORLD_2 = 162 # non-US #2
     ESCAPE = 256
@@ -196,7 +198,7 @@ class WindowHints(Enum):
     DECORATED = 0x00020005
 
 
-class FramebufferHints(Enum): 
+class FramebufferHints(Enum):
     RED_BITS = 0x00021001
     GREEN_BITS = 0x00021002
     BLUE_BITS = 0x00021003
@@ -225,7 +227,7 @@ class ContextHints(Enum):
     OPENGL_PROFILE = 0x00022008
 
 
-class OpenGLAPI(Enum):   
+class OpenGLAPI(Enum):
     OPENGL_API = 0x00030001
     OPENGL_ES_API = 0x00030002
 
