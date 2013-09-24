@@ -1,4 +1,11 @@
-from enum import Enum
+
+try:
+    from enum import Enum
+except:
+    class Enum(object):
+        """ XXX All values are expicit so no need to actually implement enum!!!
+        """
+        pass
 
 VERSION_MAJOR = 3
 VERSION_MINOR = 0
