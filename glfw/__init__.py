@@ -1,5 +1,5 @@
 from glfw._glfw import ffi, libglfw
-import glfw.error
+from glfw.error import throw_errors
 from glfw.window import Window
 import atexit
 
@@ -15,6 +15,7 @@ atexit.register(libglfw.glfwTerminate)
 
 #void glfwGetVersion(int* major, int* minor, int* rev);
 # const char* glfwGetVersionString(void);
+@throw_errors
 def get_version(verbose=False):
     if not verbose:
         major = ffi.new('int *')
@@ -31,6 +32,7 @@ def get_version(verbose=False):
 #GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun cbfun);
 # TODO
 #void glfwPollEvents(void);
+@throw_errors
 def poll_events():
     """ Process events that have already been received and return immediately.
 
@@ -52,6 +54,7 @@ def poll_events():
 
 
 #void glfwWaitEvents(void);
+@throw_errors
 def wait_events():
     """ Sleep until at least one event has been received.
 

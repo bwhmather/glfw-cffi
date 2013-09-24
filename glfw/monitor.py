@@ -1,4 +1,5 @@
 from glfw._glfw import ffi, libglfw
+from glfw.error import throw_errors
 
 
 __all__ = ['get_monitors', 'get_primary_monitor']
@@ -12,6 +13,7 @@ class Monitor(object):
 
     #void glfwGetMonitorPos(GLFWmonitor* monitor, int* xpos, int* ypos);
     @property
+    @throw_errors
     def position(self):
         x = ffi.new('int *')
         y = ffi.new('int *')
@@ -22,6 +24,7 @@ class Monitor(object):
 
     #void glfwGetMonitorPhysicalSize(GLFWmonitor* monitor, int* width, int* height);
     @property
+    @throw_errors
     def size(self):
         width = ffi.new('int *')
         height = ffi.new('int *')
@@ -32,6 +35,7 @@ class Monitor(object):
 
     #const char* glfwGetMonitorName(GLFWmonitor* monitor);
     @property
+    @throw_errors
     def name(self):
         return str(libglfw.glfwGetMonitorName(self._monitor))
 
@@ -51,6 +55,7 @@ def get_monitors():
 
 
 #GLFWmonitor* glfwGetPrimaryMonitor(void);
+@throw_errors
 def get_primary_monitor():
     monitor = libglfw.glfwGetPrimaryMonitor()
 
