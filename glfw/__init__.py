@@ -1,15 +1,15 @@
 from glfw._glfw import ffi, libglfw
 from glfw.window import Window
+import atexit
 
 
-def init():
-    if not libglfw.glfwInit():
-        raise Exception()
+__all__ = ['Window', 'poll_events', 'wait_events']
 
 
-#void glfwTerminate(void);
-def terminate():
-    libglfw.glfwTerminate()
+if not libglfw.glfwInit():
+    raise Exception()
+
+atexit.register(libglfw.glfwTerminate)
 
 
 #void glfwGetVersion(int* major, int* minor, int* rev);
