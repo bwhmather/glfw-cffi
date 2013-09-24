@@ -120,4 +120,4 @@ GLFWglproc glfwGetProcAddress(const char* procname);
 ffi = FFI()
 ffi.cdef(source)
 
-libglfw = ffi.dlopen('/usr/lib/libglfw.so')
+libglfw = ffi.dlopen('glfw')
