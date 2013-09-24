@@ -1,24 +1,17 @@
 import glfw
 
-try:
+# Create a windowed mode window and its OpenGL context
+window = glfw.Window(640, 480, "Hello World")
 
-    glfw.init()
+# Make the window's context current
+window.make_current()
 
-    # Create a windowed mode window and its OpenGL context
-    window = glfw.Window(640, 480, "Hello World")
+# Loop until the user closes the window 
+while not window.should_close():
+    # Render here
 
-    # Make the window's context current
-    window.make_current()
+    # Swap front and back buffers
+    window.swap_buffers()
 
-    # Loop until the user closes the window 
-    while not window.should_close():
-        # Render here
-
-        # Swap front and back buffers
-        window.swap_buffers()
-
-        # Poll for and process events
-        glfw.poll_events()
-
-finally:
-    glfw.terminate()
+    # Poll for and process events
+    glfw.poll_events()
