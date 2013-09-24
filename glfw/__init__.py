@@ -1,4 +1,5 @@
 from glfw._glfw import ffi, libglfw
+import glfw.error
 from glfw.window import Window
 import atexit
 
