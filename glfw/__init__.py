@@ -1,38 +1,27 @@
-from glfw._glfw import ffi, libglfw
-from glfw.error import throw_errors
+from glfw._glfw import ffi, call
 from glfw.window import Window
-import atexit
 
 
 __all__ = ['Window', 'poll_events', 'wait_events']
 
-
-if not libglfw.glfwInit():
-    raise Exception()
-
-atexit.register(libglfw.glfwTerminate)
-
-
 #void glfwGetVersion(int* major, int* minor, int* rev);
 # const char* glfwGetVersionString(void);
-@throw_errors
 def get_version(verbose=False):
     if not verbose:
         major = ffi.new('int *')
         minor = ffi.new('int *')
         rev = ffi.new('int *')
 
-        libglfw.glfwGetVersion(major, minor, rev)
+        call('glfwGetVersion', major, minor, rev)
 
         return '{}.{}.{}'.format(major, minor, rev)
     else:
-        return str(libglfw.glfwGetVersionString())
+        return str(call('glfwGetVersionString'))
 
 
 #GLFWerrorfun glfwSetErrorCallback(GLFWerrorfun cbfun);
 # TODO
 #void glfwPollEvents(void);
-@throw_errors
 def poll_events():
     """ Process events that have already been received and return immediately.
 
@@ -50,11 +39,10 @@ def poll_events():
       :py:fun:`wait_events`
 
     """
-    libglfw.glfwPollEvents()
+    call('glfwPollEvents')
 
 
 #void glfwWaitEvents(void);
-@throw_errors
 def wait_events():
     """ Sleep until at least one event has been received.
 
@@ -72,4 +60,4 @@ def wait_events():
         :py:fun:`poll_events`
 
     """
-    libglfw.glfwWaitEvents()
+    call('glfwWaitEvents')

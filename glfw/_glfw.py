@@ -1,3 +1,8 @@
+from glfw.error import error_code_map
+from glfw.error import PriorErrorError, UnknownError
+
+from functools import partial
+import atexit
 from cffi import FFI
 
 __all__ = ['ffi', 'libglfw']
@@ -121,3 +126,55 @@ ffi = FFI()
 ffi.cdef(source)
 
 libglfw = ffi.dlopen('glfw')
+
+_current_error = None
+
+
+def call_no_check_errors(name, *args, **kwargs):
+    """ Find and call a native glfw function
+    """
+    return getattr(libglfw, name)(*args, **kwargs)
+
+
+def call(name, *args, **kwargs):
+    """ Call a native glfw function throwing errors as Exceptions.
+
+    .. seealso::
+        :py:mod:`glfw.error`
+    """
+    global _current_error
+    if _current_error:
+        raise PriorErrorError(*_current_error)
+    error = None
+
+    try:
+        r = call_no_check_errors(name, *args, **kwargs)
+    finally:
+        # always clear the error if the function raised something
+        error, _current_error = _current_error, None
+
+    if error:
+        error, description = error
+        if error in _error_code_map:
+            raise _error_code_map[error](name, description)
+        else:
+            raise UnknownError(error, name, description)
+
+    return r
+
+
+# TODO consider requiring manual initialisation or initialising somewhere else?
+
+def _on_error(error, description):
+    global _current_error
+    if not _current_error:
+        _current_error = (error, description)
+
+
+call_no_check_errors("glfwSetErrorCallback",
+                     ffi.callback('GLFWerrorfun', _on_error))
+
+if not call('glfwInit'):
+    raise Exception()
+
+atexit.register(partial(call, 'glfwTerminate'))

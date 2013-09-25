@@ -1,5 +1,4 @@
-from glfw._glfw import ffi, libglfw
-from glfw.error import throw_errors
+from glfw._glfw import ffi, call
 
 
 __all__ = ['get_monitors', 'get_primary_monitor']
@@ -13,31 +12,28 @@ class Monitor(object):
 
     #void glfwGetMonitorPos(GLFWmonitor* monitor, int* xpos, int* ypos);
     @property
-    @throw_errors
     def position(self):
         x = ffi.new('int *')
         y = ffi.new('int *')
 
-        libglfw.glfwGetMonitorPos(self._monitor, x, y)
+        call('glfwGetMonitorPos', self._monitor, x, y)
 
         return int(x), int(y)
 
     #void glfwGetMonitorPhysicalSize(GLFWmonitor* monitor, int* width, int* height);
     @property
-    @throw_errors
     def size(self):
         width = ffi.new('int *')
         height = ffi.new('int *')
 
-        libglfw.glfwGetMonitorPos(self._monitor, width, height)
+        call('glfwGetMonitorPos', self._monitor, width, height)
 
         return int(width), int(height)
 
     #const char* glfwGetMonitorName(GLFWmonitor* monitor);
     @property
-    @throw_errors
     def name(self):
-        return str(libglfw.glfwGetMonitorName(self._monitor))
+        return str(call('glfwGetMonitorName', self._monitor))
 
     #GLFWmonitorfun glfwSetMonitorCallback(GLFWmonitorfun cbfun);
     # TODO
@@ -55,9 +51,8 @@ def get_monitors():
 
 
 #GLFWmonitor* glfwGetPrimaryMonitor(void);
-@throw_errors
 def get_primary_monitor():
-    monitor = libglfw.glfwGetPrimaryMonitor()
+    monitor = call('glfwGetPrimaryMonitor', )
 
     if monitor not in _monitors:
         _monitors[monitor] = Monitor(monitor)
