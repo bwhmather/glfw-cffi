@@ -155,8 +155,8 @@ def call(name, *args, **kwargs):
 
     if error:
         error, description = error
-        if error in _error_code_map:
-            raise _error_code_map[error](name, description)
+        if error in error_code_map:
+            raise error_code_map[error](name, description)
         else:
             raise UnknownError(error, name, description)
 
